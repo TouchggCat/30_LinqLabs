@@ -23,8 +23,8 @@ namespace MyHomeWork
         private void bindingSource1_CurrentChanged(object sender, EventArgs e)
         {
        
-            int positionIndex=this.bindingSource1.Position;
-            this.dataGridView2.DataSource = this.nwDataSet11.Orders[positionIndex].GetOrder_DetailsRows();
+            //int positionIndex=this.bindingSource1.Position;
+            //this.dataGridView2.DataSource = this.nwDataSet11.Orders[positionIndex].GetOrder_DetailsRows();
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -42,13 +42,7 @@ namespace MyHomeWork
             this.dataGridView1.DataSource = q.ToList();
        
             //===========================
-            //TODO 訂單明細
-            //this.bindingSource1.DataSource = this.nwDataSet11.Orders;
-            //var qq = from od in this.nwDataSet11.Order_Details
-            //             //where od.OrderID == 10248
-            //         where od.OrderID == (int)this.dataGridView1.CurrentCell.Value /*&& (int)this.dataGridView1.CurrentCell.RowIndex== bindingSource1.Position*/
-            //         select od;
-            //this.dataGridView2.DataSource = qq.ToList();
+
             //TODO 提示要使用bindingSource事件 CurrentChanged
         }
 
@@ -139,7 +133,8 @@ namespace MyHomeWork
             else
             {
                 var qq = from od in this.nwDataSet11.Order_Details
-                         where od.OrderID == (int)this.dataGridView1.CurrentCell.Value
+                             //where od.OrderID == (int)this.dataGridView1.CurrentCell.Value    //只能點選OrderID欄位，點其他欄位會出現轉換無效例外
+                         where od.OrderID == (int)this.dataGridView1.CurrentRow.Cells[0].Value    //可點選所有欄位 只會找該列的第0個欄位
                          select od;
                 this.dataGridView2.DataSource = qq.ToList();
             }
