@@ -37,17 +37,24 @@ namespace MyHomeWork
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var q = nwDataSet11.ProductPhoto.
-                Where(n => n.ModifiedDate.Date >= this.dateTimePicker1.Value && n.ModifiedDate.Date <= this.dateTimePicker2.Value).
-                Select(n => n);
-            this.dataGridView1.DataSource = q.ToList();
+            if (dateTimePicker1.Value >= dateTimePicker2.Value)
+            {
+                MessageBox.Show("起始日期須小於結束日期");
+            }
+            else
+            {
+                var q = nwDataSet11.ProductPhoto.
+                    Where(n => n.ModifiedDate.Date >= this.dateTimePicker1.Value && n.ModifiedDate.Date <= this.dateTimePicker2.Value);
+                //.Select(n => n); 可以省略?
+                this.dataGridView1.DataSource = q.ToList();
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             var q = nwDataSet11.ProductPhoto.
-                Where(n => n.ModifiedDate.Year == Convert.ToInt32(this.comboBox3.SelectedItem)).
-                Select(n => n);
+                Where(n => n.ModifiedDate.Year == Convert.ToInt32(this.comboBox3.SelectedItem));
+            //.Select(n => n); 可以省略?
             dataGridView1.DataSource = q.ToList();
         }
 
@@ -58,9 +65,9 @@ namespace MyHomeWork
             int sEnd = 3 + 3 * x;
 
             var q = nwDataSet11.ProductPhoto.
-                Where(n => n.ModifiedDate.Month>=sStart&&n.ModifiedDate.Month<=sEnd).
-                OrderBy(n=>n.ModifiedDate.Year).
-                Select(n => n);
+                Where(n => n.ModifiedDate.Month >= sStart && n.ModifiedDate.Month <= sEnd).
+                OrderBy(n => n.ModifiedDate.Year);
+                //.Select(n => n);  可以省略?
             dataGridView1.DataSource = q.ToList();
         }
 

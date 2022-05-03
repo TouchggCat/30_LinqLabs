@@ -48,5 +48,21 @@ namespace Starter
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            listBox1.Items.Add("Sum = " + nums.Sum());
+            listBox1.Items.Add("Max = " + nums.Max());
+            listBox1.Items.Add("Min = " + nums.Min());
+            listBox1.Items.Add("Average = " + nums.Average());
+            listBox1.Items.Add("Count = " + nums.Count());
+            //==================================
+            this.productsTableAdapter1.Fill(nwDataSet11.Products);
+            this.listBox1.Items.Add("Sum UnitsInStock = " + this.nwDataSet11.Products.Sum(p => p.UnitsInStock));
+            this.listBox1.Items.Add("Max UnitsInStock = " + this.nwDataSet11.Products.Max(p => p.UnitsInStock));
+            this.listBox1.Items.Add("Min UnitsInStock = " + this.nwDataSet11.Products.Min(p => p.UnitsInStock));
+            this.listBox1.Items.Add("Average UnitsInStock = " + this.nwDataSet11.Products.Average(p => p.UnitsInStock));
+        }
     }
 }

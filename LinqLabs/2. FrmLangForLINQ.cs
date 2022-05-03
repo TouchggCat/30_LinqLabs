@@ -209,7 +209,7 @@ namespace Starter
                 this.listBox1.Items.Add(n);
             }
             //===================匿名方法
-            List<int> list1 = MyWhere(nums, n=>n>5);  //return int n>5的方法(也就是匿名方法)
+            List<int> list1 = MyWhere(nums, n=>n>5);  //return int n>5的方法(也就是匿名方法) //參數要是bool
             List<int> OddList = MyWhere(nums, n => n %2==1);
             List<int> EvenList = MyWhere(nums, n => n %2==0);
             this.listBox1.Items.Add("==============");
