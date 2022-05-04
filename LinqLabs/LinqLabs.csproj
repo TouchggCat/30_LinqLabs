@@ -85,6 +85,12 @@
     <Compile Include="30HW\Frm作業_3.designer.cs">
       <DependentUpon>Frm作業_3.cs</DependentUpon>
     </Compile>
+    <Compile Include="30HW\Frm考試.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="30HW\Frm考試.designer.cs">
+      <DependentUpon>Frm考試.cs</DependentUpon>
+    </Compile>
     <Compile Include="4. FrmLINQ_To_XXX.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,11 +132,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>NWModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Order.cs">
+      <DependentUpon>NWModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Order_Detail.cs">
+      <DependentUpon>NWModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Product.cs">
       <DependentUpon>NWModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sales_by_Year_Result.cs">
+      <DependentUpon>NWModel.tt</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="1. FrmHelloLinq.resx">
       <DependentUpon>1. FrmHelloLinq.cs</DependentUpon>
     </EmbeddedResource>
@@ -145,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="30HW\Frm作業_3.resx">
       <DependentUpon>Frm作業_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="30HW\Frm考試.resx">
+      <DependentUpon>Frm考試.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="4. FrmLINQ_To_XXX.resx">
       <DependentUpon>4. FrmLINQ_To_XXX.cs</DependentUpon>

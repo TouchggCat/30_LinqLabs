@@ -284,7 +284,7 @@ namespace Starter
             //========================
             //var 用在 型別難寫
             //var for 匿名型別
-            var n = 100;
+            //var n = 100;
             var s = "aaaa";
             MessageBox.Show(s.ToUpper());
             //s.Length =

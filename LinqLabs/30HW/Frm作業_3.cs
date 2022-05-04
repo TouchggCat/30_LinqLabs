@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinqLabs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -119,7 +120,7 @@ namespace MyHomeWork
             this.dataGridView2.DataSource = treelist;
             //===========================
             this.treeView1.Nodes.Clear();
-            TreeNode node;
+            TreeNode node;   //TODO   無法呈現 要用3個list嗎
             foreach (var g in list)
             {
                 node = this.treeView1.Nodes.Add(g.大小);
@@ -173,6 +174,157 @@ namespace MyHomeWork
             {
                 this.大小 = p1;
                 this.陣列元素 = p2;
+            }
+        }
+        //================================================
+        NorthwindEntities dbContext = new NorthwindEntities();
+        private void button8_Click(object sender, EventArgs e)
+        {
+            this.dataGridView1.DataSource = null;
+            var q = from p in dbContext.Products.AsEnumerable()  //!!必須加入AsEnumerable()  方法傳回為可列舉值
+                        //where p.UnitPrice != null
+                        orderby p.UnitPrice
+                    group p by PriceKey(p.UnitPrice) into g  //TODO 方法一直出錯
+                    select new
+                    {
+                        MyPrice = g.Key,
+                        Count = g.Count(),
+                        MyGroup = g
+                    };
+            this.dataGridView1.DataSource = q.ToList();
+            this.treeView1.Nodes.Clear();
+            foreach(var group in q)
+            {
+                TreeNode node = this.treeView1.Nodes.Add($"{group.MyPrice.ToString()}  ({group.Count})");
+                foreach(var item in group.MyGroup)
+                {
+                    node.Nodes.Add($"{item.ProductID}_{item.ProductName}");
+                }
+
+            }
+
+        }
+        private object PriceKey(decimal? n)
+        {
+            if (n < 10) 
+            { 
+                return "低價位"; 
+            }
+            else if (n < 40)
+            {
+                return "中價位";
+                    }
+            else 
+            { 
+                return "高價位"; 
+            }
+        }
+
+        //=========================================
+        private void button15_Click(object sender, EventArgs e)
+        {
+            this.dataGridView1.DataSource = null;
+            var q = from y in this.dbContext.Orders
+                    group y by y.OrderDate.Value.Year into g
+                    select new
+                    {
+                        年 = g.Key,
+                        Count = g.Count(),
+                        MyGroup = g
+                    };
+            this.dataGridView1.DataSource = q.ToList();
+            treeView1.Nodes.Clear();
+            foreach (var group in q)
+            {
+                TreeNode node = this.treeView1.Nodes.Add(group.年.ToString());
+                foreach (var item in group.MyGroup)  //每個群下面的檔案
+                {
+                    node.Nodes.Add(item.CustomerID.ToString() +"  ,  " + item.OrderDate);
+                }
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            this.dataGridView1.DataSource = null;
+            var q = from y in this.dbContext.Orders
+                    group y by new { y.OrderDate.Value.Year, y.OrderDate.Value.Month } into g
+                    orderby g.Key
+                    //new 一個新個grouping方式
+                    select new
+                    {
+                        MyYear = g.Key.Year,    //從key下面導出年 月
+                        MyMonth = g.Key.Month,
+                        Count = g.Count(),
+                        MyGroup = g
+                    };
+            this.dataGridView1.DataSource = q.ToList();
+            treeView1.Nodes.Clear();
+            foreach (var group in q)
+            {
+                TreeNode node = this.treeView1.Nodes.Add($"{group.MyYear.ToString()}/{group.MyMonth}({group.Count})");
+                foreach (var item in group.MyGroup)  //每個群下面的檔案
+                {
+                    node.Nodes.Add(item.OrderDate.Value.Month.ToString() + "  ,  " + item.OrderID);
+                }
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var q = (from od in dbContext.Order_Details
+                         //select od.UnitPrice * od.Quantity * (1 - od.Discount)).Sum();   //TODO 計算Discount要怎麼轉型?
+                     select (double)od.UnitPrice * od.Quantity * (1 - od.Discount)).Sum();    //轉型寫在最前面
+
+            MessageBox.Show("總銷售額 = " +q);
+            //dataGridView1.DataSource = q.ToList();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var q = (from n in dbContext.Order_Details
+                     group n by n.Order.EmployeeID into g
+                     orderby g.Sum(n => n.UnitPrice * n.Quantity) descending
+                     select new
+                    {
+                        ID=g.Key,
+                        SaleAmount=(g.Sum(n=>(double)n.UnitPrice*n.Quantity*(1-n.Discount)))
+                    }).Take(5);
+            dataGridView1.DataSource = q.ToList();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var q = (from c in dbContext.Categories
+                     from n in c.Products                 //這邊要用導覽屬性
+                     orderby n.UnitPrice descending
+                     where n.UnitPrice != null
+                    //group c by c.CategoryName into g
+                    select new
+                    {
+                      c.CategoryName,
+                        n.ProductName,
+                        n.UnitPrice
+                        //Price = g.OrderByDescending(n=>n.UnitPrice),
+                    }).Take(5);
+            dataGridView1.DataSource = q.ToList();
+        }
+        
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var q = from n in dbContext.Products
+                    where n.UnitPrice >= 300
+                    select n;
+            dataGridView1.DataSource = q.ToList();
+            //  bool result = db.Products.Select(p => p.UnitPrice).Any(p => p > 300);
+
+            if (q.Count()==0)
+            {
+                MessageBox.Show("大於300數量=" + q.Count());
+            }
+            else
+            {
+                MessageBox.Show("大於300數量 =" + q.Count());
             }
         }
     }

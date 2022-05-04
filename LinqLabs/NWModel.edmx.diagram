@@ -6,8 +6,12 @@
     <edmx:Diagrams>
       <Diagram DiagramId="51303f9437494a3eb9ccfb3233d89896" Name="Diagram1">
         <EntityTypeShape EntityType="NorthwindModel.Category" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="NorthwindModel.Product" Width="1.5" PointX="4.125" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="NorthwindModel.Product" Width="1.5" PointX="4.125" PointY="1.125" IsExpanded="true" />
         <AssociationConnector Association="NorthwindModel.FK_Products_Categories1" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="NorthwindModel.Order_Detail" Width="1.5" PointX="7" PointY="1.375" />
+        <EntityTypeShape EntityType="NorthwindModel.Order" Width="1.5" PointX="9.75" PointY="1.375" />
+        <AssociationConnector Association="NorthwindModel.FK_Order_Details_Orders" />
+        <AssociationConnector Association="NorthwindModel.FK_Order_Details_Products" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
