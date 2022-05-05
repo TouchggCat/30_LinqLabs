@@ -92,7 +92,7 @@ namespace LinqLabs
             // 74     3.00%
             // 75     3.00%
         }
-
+        NorthwindEntities dbContext = new NorthwindEntities();
         private void button34_Click(object sender, EventArgs e)
         {
             // 年度最高銷售金額 年度最低銷售金額
@@ -100,9 +100,23 @@ namespace LinqLabs
             // 那一個月總銷售最好 ? 那一個月總銷售最不好 ?
 
             // 每年 總銷售分析 圖
-            // 每月 總銷售分析 圖
+            // 每月 總銷售分析 圖.
+            var q = from o in dbContext.Orders
+                    from od in o.Order_Details
+                    orderby o.OrderDate.Value.Year
+                    //group o by o.OrderDate.Value.Year into g
+                    select new
+                    {
+                        o.OrderDate.Value.Year,   //TODO
+                        Total = (od.UnitPrice * od.Quantity)
+                    };
+            dataGridView1.DataSource = q.ToList();
+            //this.chart1.DataSource = q.ToList();
+            //this.chart1.Series[0].XValueMember = "MyKey";
+            //this.chart1.Series[0].YValueMembers = "MyCount";
+            //this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
         }
 
-      
+
     }
 }

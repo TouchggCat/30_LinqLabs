@@ -236,7 +236,7 @@ namespace MyHomeWork
             treeView1.Nodes.Clear();
             foreach (var group in q)
             {
-                TreeNode node = this.treeView1.Nodes.Add(group.年.ToString());
+                TreeNode node = this.treeView1.Nodes.Add($"{group.年.ToString()} ({group.Count})");
                 foreach (var item in group.MyGroup)  //每個群下面的檔案
                 {
                     node.Nodes.Add(item.CustomerID.ToString() +"  ,  " + item.OrderDate);
