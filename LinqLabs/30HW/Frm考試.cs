@@ -39,16 +39,33 @@ namespace LinqLabs
             public int Math { get;  set; }
             public string Gender { get; set; }
         }
-
+        int studentCount=0;
         private void button36_Click(object sender, EventArgs e)
         {
             #region 搜尋 班級學生成績
-           
-            // 
-            // 共幾個 學員成績 ?						
 
-            // 找出 前面三個 的學員所有科目成績					
-            // 找出 後面兩個 的學員所有科目成績					
+            // 
+            // 共幾個 學員成績 ?			
+            studentCount++;
+            if (studentCount == 1)
+            {
+                this.chart1.Series.Clear();
+                this.chart1.DataSource = null;
+                var q = from n in students_scores
+                        group n by n.Class into g
+                        select new
+                        {
+                            班級 = g.Key,
+                            學員成績數 = g.Count()
+                        };
+                this.chart1.Series.Add("各班學員成績數");
+                this.chart1.DataSource = q.ToList();
+                this.chart1.Series[0].XValueMember = "班級";
+                this.chart1.Series[0].YValueMembers = "學員成績數";
+                this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            }
+
+			
 
             // 找出 Name 'aaa','bbb','ccc' 的學員國文英文科目成績						
 
@@ -59,9 +76,72 @@ namespace LinqLabs
             // 找出 'aaa', 'bbb' 'ccc' 學員 國文數學兩科 科目成績  |				
             // 數學不及格 ... 是誰 
             #endregion
+            else if (studentCount == 2)
+            {
+                // 找出 前面三個 的學員所有科目成績		
+                this.chart1.Series.Clear();
+                this.chart1.DataSource = null;
 
+                //var q2 = (from n in students_scores
+                //          orderby n.Chi
+                //          select new
+                //          {
+                //              名字=n.Name,
+                //              國文 = n.Chi,
+                //              英文 = n.Eng,
+                //              數學 = n.Math
+                //          }).Take(3);
+                var q2 = students_scores.Take(3).Select(m => new
+                {
+                    名字 = m.Name,
+                    國文 = m.Chi,
+                    英文 = m.Eng,
+                    數學 = m.Math
+                });
+                this.chart1.DataSource = q2.ToList();
+                this.chart1.Series.Add("前3個學生國文成績");
+                this.chart1.Series[0].XValueMember = "名字";
+                this.chart1.Series[0].YValueMembers = "國文";
+                this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+                this.chart1.Series.Add("前3個學生英文成績");
+                this.chart1.Series[1].XValueMember = "名字";
+                this.chart1.Series[1].YValueMembers = "英文";
+                this.chart1.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+                this.chart1.Series.Add("前3個學生數學成績");
+                this.chart1.Series[2].XValueMember = "名字";
+                this.chart1.Series[2].YValueMembers = "數學";
+                this.chart1.Series[2].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            }
+            else if (studentCount == 3)
+            {
+                // 找出 後面兩個 的學員所有科目成績		
+                this.chart1.Series.Clear();
+                this.chart1.DataSource = null;
+                var q2 = students_scores.Skip(students_scores.Count()-2).Take(2)/*.OrderByDescending(n => n.Chi).ThenByDescending(n => n.Eng).ThenByDescending(n => n.Math)*/
+                    .Select(m => new
+                {
+                    名字 = m.Name,
+                    國文 = m.Chi,
+                    英文 = m.Eng,
+                    數學 = m.Math
+                });
+                this.chart1.DataSource = q2.ToList();
+                this.chart1.Series.Add("後2個學生國文成績");
+                this.chart1.Series[0].XValueMember = "名字";
+                this.chart1.Series[0].YValueMembers = "國文";
+                this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+                this.chart1.Series.Add("後2個學生英文成績");
+                this.chart1.Series[1].XValueMember = "名字";
+                this.chart1.Series[1].YValueMembers = "英文";
+                this.chart1.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+                this.chart1.Series.Add("後2個學生數學成績");
+                this.chart1.Series[2].XValueMember = "名字";
+                this.chart1.Series[2].YValueMembers = "數學";
+                this.chart1.Series[2].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            }
         }
-  
+
+
         private void button37_Click(object sender, EventArgs e)
         {
             //個人 sum, min, max, avg
@@ -208,6 +288,11 @@ namespace LinqLabs
                 MessageBox.Show("銷售最差年份:" + q.ToString());
                 count = 0;
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
