@@ -1,4 +1,5 @@
 ﻿
+using LinqLabs;
 using MyHomeWork;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ namespace Starter
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Frm作業_1());
             //Application.Run(new Frm作業_2());
-            Application.Run(new Frm作業_3());
+            //Application.Run(new Frm作業_3());
+            Application.Run(new Frm考試());
             //Application.Run(new FrmHelloLinq());
             //Application.Run(new FrmLangForLINQ());
             //Application.Run(new FrmLINQ架構介紹_InsideLINQ());

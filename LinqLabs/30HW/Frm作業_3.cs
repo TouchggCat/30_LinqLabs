@@ -312,20 +312,22 @@ namespace MyHomeWork
         
         private void button7_Click(object sender, EventArgs e)
         {
-            var q = from n in dbContext.Products
-                    where n.UnitPrice >= 300
-                    select n;
-            dataGridView1.DataSource = q.ToList();
-            //  bool result = db.Products.Select(p => p.UnitPrice).Any(p => p > 300);
+            //var q = from n in dbContext.Products
+            //        where n.UnitPrice >= 300
+            //        select n;
+            //dataGridView1.DataSource = q.ToList();
+            //if (q.Count() == 0)
+            //{
+            //    MessageBox.Show("大於300數量=" + q.Count());
+            //}
+            //else
+            //{
+            //    MessageBox.Show("大於300數量 =" + q.Count());
+            //}
+            //bool result = db.Products.Select(p => p.UnitPrice).Any(p => p > 300);
+            bool result = dbContext.Products.Any(p => p.UnitPrice > 300);
+            MessageBox.Show(result ? "有大於300" : "沒有大於300");
 
-            if (q.Count()==0)
-            {
-                MessageBox.Show("大於300數量=" + q.Count());
-            }
-            else
-            {
-                MessageBox.Show("大於300數量 =" + q.Count());
-            }
         }
     }
 }

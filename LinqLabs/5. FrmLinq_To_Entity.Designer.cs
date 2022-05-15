@@ -237,6 +237,7 @@
             this.button10.TabIndex = 83;
             this.button10.Text = "1. 尋找各分類之平均單價 (Inner Join)  (by CategoryName)";
             this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button11
             // 
@@ -286,6 +287,7 @@
             this.button20.TabIndex = 91;
             this.button20.Text = "join (inner join) / join into .. (left outer join).";
             this.button20.UseVisualStyleBackColor = true;
+            this.button20.Click += new System.EventHandler(this.button20_Click);
             // 
             // button16
             // 

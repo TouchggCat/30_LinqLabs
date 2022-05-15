@@ -93,30 +93,121 @@ namespace LinqLabs
             // 75     3.00%
         }
         NorthwindEntities dbContext = new NorthwindEntities();
+        int count = 0;
         private void button34_Click(object sender, EventArgs e)
         {
             // 年度最高銷售金額 年度最低銷售金額
-            // 那一年總銷售最好 ? 那一年總銷售最不好 ?  
-            // 那一個月總銷售最好 ? 那一個月總銷售最不好 ?
+       
 
             // 每年 總銷售分析 圖
             // 每月 總銷售分析 圖.
-            var q = from o in dbContext.Orders
-                    from od in o.Order_Details
-                    orderby o.OrderDate.Value.Year
-                    //group o by o.OrderDate.Value.Year into g
-                    select new
-                    {
-                        o.OrderDate.Value.Year,   //TODO
-                        Total = (od.UnitPrice * od.Quantity)
-                    };
-            dataGridView1.DataSource = q.ToList();
-            //this.chart1.DataSource = q.ToList();
-            //this.chart1.Series[0].XValueMember = "MyKey";
-            //this.chart1.Series[0].YValueMembers = "MyCount";
-            //this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            //==============================================
+            count++; //按一次切換
+            if (count == 1)
+            {
+                dataGridView1.DataSource = null;
+                this.chart1.Series.Clear();
+                this.chart1.DataSource = null;
+                this.chart1.Series.Add("年銷售額");
+                var q = from od in dbContext.Order_Details.AsEnumerable()
+                        group od by od.Order.OrderDate.Value.Year into g
+                        orderby g.Key 
+                        select new
+                        {
+                            年份 = g.Key,
+                            銷售額 = g.Sum(w => /*(double)*/w.UnitPrice * w.Quantity)
+                            //select new 可不加(double)
+                        };
+                dataGridView1.DataSource = q.ToList();
+                //this.chart1.Series[0].Name = "年度銷售額";       //這裡不能這樣寫?
+                this.chart1.DataSource = q.ToList();           //只能加入一次var q ??
+                this.chart1.Series[0].XValueMember = "年份";
+                this.chart1.Series[0].YValueMembers = "銷售額";          //跟key的字要相同
+                this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+
+            }
+            //======================================
+            else if (count == 2)
+            {
+                dataGridView1.DataSource = null;
+                this.chart1.Series.Clear();
+                this.chart1.DataSource = null;
+                this.chart1.Series.Add("月銷售額");
+                var qq = from od in dbContext.Order_Details.AsEnumerable()
+                         group od by od.Order.OrderDate.Value.Month into g
+                         orderby g.Key
+                         select new
+                         {
+                             月份 = g.Key,
+                             銷售額 = g.Sum(bbb => bbb.UnitPrice * bbb.Quantity)
+                         };
+                dataGridView1.DataSource = qq.ToList();
+                this.chart1.DataSource = qq.ToList();
+                //this.chart1.Name = "每月銷售額";
+                this.chart1.Series[0].XValueMember = "月份";
+                chart1.Series[0].YValueMembers = "銷售額";
+                chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            }
+       
+            // 年度最高銷售金額 年度最低銷售金額
+            else if (count == 3)
+            {
+                dataGridView1.DataSource = null;
+                this.chart1.Series.Clear();
+                this.chart1.DataSource = null;
+                this.chart1.Series.Add("年銷售最高");
+                this.chart1.Series.Add("年銷售最低");    //加入第二個Series
+                var qq = from od in dbContext.Order_Details.AsEnumerable()
+                         group od by od.Order.OrderDate.Value.Year into g
+                         orderby g.Key
+                         select new
+                         {
+                             年份 = g.Key,
+                             最高銷售額 = g.Max(bbb => bbb.UnitPrice * bbb.Quantity),
+                             最低銷售額 = g.Min(ccc => ccc.UnitPrice * ccc.Quantity)
+                         };
+                this.chart1.DataSource = qq.ToList();
+                this.chart1.Series[0].XValueMember = "年份";
+                this.chart1.Series[0].YValueMembers = "最高銷售額";
+                this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+                this.chart1.DataSource = qq.ToList();
+                this.chart1.Series[1].XValueMember = "年份";
+                this.chart1.Series[1].YValueMembers = "最低銷售額";
+                this.chart1.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+            }
+            //那一年總銷售最好? 那一年總銷售最不好 ?  
+            // 那一個月總銷售最好? 那一個月總銷售最不好 ?
+            else if (count == 4)
+            {
+                //this.chart1.DataSource = null;
+                //this.chart1.Series.Clear();
+                //this.chart1.Series.Add("銷售最差年份");
+                //this.chart1.Series.Add("銷售最低年份");
+                var q = (from o in dbContext.Order_Details.AsEnumerable()
+                         group o by o.Order.OrderDate.Value.Year into g
+                         orderby g.Key
+                         select new
+                         {
+                             年份 = g.Key,
+                             銷售額 = g.Sum(n => n.UnitPrice * n.Quantity)
+                         }).OrderByDescending(n => n.銷售額).Select(m => m.年份).FirstOrDefault();    //.Max(n => n.年份)    最高數字的年份     是要問最高銷售額
+        
+                MessageBox.Show("銷售最佳年份:" + q.ToString());
+            }
+            else if (count == 5)
+            {
+                var q = (from o in dbContext.Order_Details.AsEnumerable()
+                         group o by o.Order.OrderDate.Value.Year into g
+                         orderby g.Key
+                         select new
+                         {
+                             年份 = g.Key,
+                             銷售額 = g.Sum(n => n.UnitPrice * n.Quantity)
+                         }).OrderByDescending(n => n.銷售額).Select(m => m.年份).LastOrDefault();   
+
+                MessageBox.Show("銷售最差年份:" + q.ToString());
+                count = 0;
+            }
         }
-
-
     }
 }

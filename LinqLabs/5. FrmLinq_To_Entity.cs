@@ -158,5 +158,20 @@ namespace Starter
 
             this.Read_RefreshDataGridView();
         }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            var q2 = from c in this.dbContext.Categories
+                     join p in this.dbContext.Products
+                     on c.CategoryID equals p.CategoryID
+                     select new { c.CategoryID, c.CategoryName, p.ProductName, p.UnitPrice };
+
+            this.dataGridView2.DataSource = q2.ToList();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
